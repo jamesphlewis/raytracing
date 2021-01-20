@@ -22,7 +22,7 @@ def RayColor(ray, hittables, depth=50):
             attenuate, attenuation, scattered = rec.material.scatter(ray, rec)
             if attenuate:
                 return MultiplyVectors(attenuation, RayColor(scattered, hittables, depth-1))
-            return color(0, 0, 0)
+            return Color(0, 0, 0)
 
     unit_direction = UnitVector(ray.direction)
     t = 0.5 * (unit_direction.y() + 1.0)
