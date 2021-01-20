@@ -14,7 +14,7 @@ class Ray():
 INFINITY = 10000000000
 
 def RayColor(ray, hittables, depth=50):
-    hit, rec = HitFromList(ray, 0, INFINITY, hittables)
+    hit, rec = HitFromList(ray, 0.000001, INFINITY, hittables)
     if depth <= 0:
         return Color(0, 0, 0)
     if hit:
