@@ -13,13 +13,15 @@ class Ray():
 
 INFINITY = 10000000000
 
-def RayColor(ray, hittables):
+def RayColor(ray, hittables, depth=50):
     hit, rec = HitFromList(ray, 0, INFINITY, hittables)
+    if depth <= 0:
+        return Color(0, 0, 0)
     if hit:
         target = AddVectors(rec.point, rec.normal)
         target = AddVectors(target, RandomInUnitSphere())
         r = Ray(rec.point, SubtractVectors(target, rec.point))
-        return MultiplyVectorByConstant(RayColor(r, hittables), 0.5)
+        return MultiplyVectorByConstant(RayColor(r, hittables, depth-1), 0.3)
 
     unit_direction = UnitVector(ray.direction)
     t = 0.5 * (unit_direction.y() + 1.0)
