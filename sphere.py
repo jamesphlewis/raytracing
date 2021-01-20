@@ -42,3 +42,11 @@ def RandomInUnitSphere():
 
 def RandomUnitVector():
     return UnitVector(RandomInUnitSphere())
+
+def RandomInHemisphere(normal):
+    us = RandomInUnitSphere()
+    if Dot(us, normal) > 0.0:
+        return us
+    else:
+        us.negate()
+        return us

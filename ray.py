@@ -1,6 +1,6 @@
 from vec3 import Color, Point3
 from vec3_utils import AddVectors, SubtractVectors, MultiplyVectorByConstant, UnitVector
-from sphere import RandomUnitVector
+from sphere import RandomInHemisphere
 from hittable import HitFromList
 
 class Ray():
@@ -18,8 +18,7 @@ def RayColor(ray, hittables, depth=50):
     if depth <= 0:
         return Color(0, 0, 0)
     if hit:
-        target = AddVectors(rec.point, rec.normal)
-        target = AddVectors(target, RandomUnitVector())
+        target = AddVectors(rec.point, RandomInHemisphere(rec.normal))
         r = Ray(rec.point, SubtractVectors(target, rec.point))
         return MultiplyVectorByConstant(RayColor(r, hittables, depth-1), 0.3)
 
