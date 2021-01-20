@@ -1,7 +1,7 @@
 import math
 from hittable import HitRecord
 from vec3 import Color, Point3, Vec3
-from vec3_utils import SubtractVectors, Dot, DivideVectorByConstant
+from vec3_utils import SubtractVectors, Dot, DivideVectorByConstant, UnitVector
 
 class Sphere():
     def __init__(self, center, radius):
@@ -39,3 +39,6 @@ def RandomInUnitSphere():
         v = Vec3.random_clamp(-1, 1)
         if v.length_squared() < 1:
             return v
+
+def RandomUnitVector():
+    return UnitVector(RandomInUnitSphere())
