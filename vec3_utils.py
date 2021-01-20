@@ -1,3 +1,4 @@
+from math import sqrt
 from vec3 import Vec3
 
 def AddVectors(l, r):
@@ -30,3 +31,21 @@ def Reflect(v, n):
     d = Dot(v, n)
     d = MultiplyVectorByConstant(MultiplyVectorByConstant(n, d), 2)
     return SubtractVectors(v, d)
+
+def Refract(uv, n, etai_over_etat):
+    cos_theta = min(Dot(uv.negate(), n), 1)
+    r_out_perp = MultiplyVectorByConstant(
+        AddVectors(
+            MultiplyVectorByConstant(
+                n,
+                cos_theta
+            ),
+            uv
+        ),
+        etai_over_etat
+    )
+    r_out_parallel = MultiplyVectorByConstant(
+        n,
+        -sqrt(abs(1.0 - r_out_perp.length_squared()))
+    )
+    return AddVectors(r_out_parallel, r_out_perp)
