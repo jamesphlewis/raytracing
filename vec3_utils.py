@@ -25,3 +25,8 @@ def Cross(l, r):
 
 def UnitVector(v):
     return DivideVectorByConstant(v, v.length())
+
+def Reflect(v, n):
+    d = Dot(v, n)
+    d = MultiplyVectorByConstant(MultiplyVectorByConstant(n, d), 2)
+    return SubtractVectors(v, d)

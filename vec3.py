@@ -48,6 +48,10 @@ class Vec3():
     def random_clamp(cls, min, max):
         return cls(Clamp(random(), min, max), Clamp(random(), min, max), Clamp(random(), min, max))
 
+    def near_zero(self):
+        zero = 0.00000001
+        return (abs(self.e[0]) < zero and abs(self.e[1]) < zero and abs(self.e[2]) < zero)
+
 Point3 = Vec3
 Color = Vec3
 
