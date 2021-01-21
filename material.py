@@ -1,6 +1,8 @@
+from math import sqrt
+from random import random
 from vec3 import Color
 from ray import Ray
-from vec3_utils import Dot, Reflect, UnitVector, AddVectors, MultiplyVectorByConstant, Refract
+from vec3_utils import Dot, Reflect, UnitVector, AddVectors, MultiplyVectorByConstant, Refract, Negate
 from sphere import RandomUnitVector, RandomInUnitSphere
 
 class Metal():
@@ -36,6 +38,20 @@ class Dialectric():
         attenuation = Color(1.0, 1.0, 1.0)
         refraction_ratio = 1.0 / self.index_of_refraction if rec.front_face else self.index_of_refraction
         unit_dir = UnitVector(r_in.direction)
-        refracted = Refract(unit_dir, rec.normal, refraction_ratio)
-        scattered = Ray(rec.point, refracted)
+        cos_theta = min(Dot(Negate(unit_dir), rec.normal), 1.0)
+        sin_theta = sqrt(1.0 - cos_theta**2)
+
+        cannot_refract = (refraction_ratio * sin_theta) > 1.0
+        direction = None
+        if cannot_refract or (Reflectance(cos_theta, refraction_ratio) > random()):
+            direction = Reflect(unit_dir, rec.normal)
+        else:
+            direction = Refract(unit_dir, rec.normal, refraction_ratio)
+
+        scattered = Ray(rec.point, direction)
         return True, attenuation, scattered
+
+def Reflectance(cosine, ref_idx):
+    r0 = (1 - ref_idx) / (1 + ref_idx)
+    r0 = r0**2
+    return r0 + (1 - r0) * pow((1 - cosine), 5)

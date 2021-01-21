@@ -1,5 +1,9 @@
 from math import sqrt
+from random import random
 from vec3 import Vec3
+
+def Negate(v):
+    return Vec3(-v.e[0], -v.e[1], -v.e[2])
 
 def AddVectors(l, r):
     return Vec3(l.e[0] + r.e[0], l.e[1] + r.e[1], l.e[2] + r.e[2])
@@ -33,7 +37,7 @@ def Reflect(v, n):
     return SubtractVectors(v, d)
 
 def Refract(uv, n, etai_over_etat):
-    cos_theta = min(Dot(uv.negate(), n), 1)
+    cos_theta = min(Dot(Negate(uv), n), 1)
     r_out_perp = MultiplyVectorByConstant(
         AddVectors(
             MultiplyVectorByConstant(
@@ -49,3 +53,9 @@ def Refract(uv, n, etai_over_etat):
         -sqrt(abs(1.0 - r_out_perp.length_squared()))
     )
     return AddVectors(r_out_parallel, r_out_perp)
+
+def RandomInUnitDisk():
+    while True:
+        p = Vec3((random() *  2) - 1, (random() * 2) - 1, 0)
+        if p.length_squared() < 1:
+            return p

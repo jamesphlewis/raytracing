@@ -8,7 +8,7 @@ from ray import Ray, RayColor
 from vec3_utils import DivideVectorByConstant, MultiplyVectorByConstant, AddVectors, SubtractVectors
 from print_utils import PrintColor
 
-SAMPLES_PER_PIXEL = 2
+SAMPLES_PER_PIXEL = 10
 ASPECT_RATIO = 16.0 / 9.0
 IMG_WIDTH = 400
 IMG_HEIGHT = int(IMG_WIDTH / ASPECT_RATIO)
@@ -24,12 +24,25 @@ def makeImage():
 
     world = [
         Sphere(Point3(0, -100.5, -1), 100, material_ground),
-        Sphere(Point3(0, 0, -1.0), 0.5, material_center_dia),
+        Sphere(Point3(0, 0, -1.0), 0.5, material_center),
         Sphere(Point3(-1.0, 0, -1.0), 0.5, material_left_dia),
         Sphere(Point3(1.0, 0, -1.0), 0.5, material_right),
     ]
 
-    cam = Camera()
+    lookfrom = Point3(3, 3, 2)
+    lookat = Point3(0, 0, -1)
+    vup = Vec3(0, 1, 0)
+    dist_to_focus = SubtractVectors(lookfrom, lookat).length()
+    aperture = 2.0
+
+    cam = Camera(
+        lookfrom,
+        lookat,
+        vup,
+        20,
+        ASPECT_RATIO,
+        aperture,
+        dist_to_focus)
     print("P3\n{} {} \n255".format(IMG_WIDTH, IMG_HEIGHT))
     for j in range(IMG_HEIGHT, 0, -1):
         for i in range(IMG_WIDTH):
