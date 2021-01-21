@@ -8,32 +8,51 @@ from ray import Ray, RayColor
 from vec3_utils import DivideVectorByConstant, MultiplyVectorByConstant, AddVectors, SubtractVectors
 from print_utils import PrintColor
 
-SAMPLES_PER_PIXEL = 10
-ASPECT_RATIO = 16.0 / 9.0
-IMG_WIDTH = 400
+SAMPLES_PER_PIXEL = 2
+ASPECT_RATIO = 3.0 / 2.0
+IMG_WIDTH = 1200
 IMG_HEIGHT = int(IMG_WIDTH / ASPECT_RATIO)
 
+def make_world():
+    world = []
+    ground = Lambertian(Color(0.5, 0.5, 0.5))
+    world.append(Sphere(Point3(0, -1000, 0), 1000, ground))
+    num_balls = 2
+    for x in range(-num_balls, num_balls):
+        for y in range(-num_balls, num_balls):
+            mat = random()
+            center = Point3(x + 0.9 * random(), 0.2, y + 0.9 * random())
+
+            if (SubtractVectors(center, Point3(4, 0.2, 0)).length() > 0.9):
+                if mat < 0.8:
+                    color = Color(random(), random(), random())
+                    sphere_mat = Lambertian(color)
+                    world.append(Sphere(center, 0.2, sphere_mat))
+                elif mat < 0.95:
+                    color = Color(random(), random(), random())
+                    fuzz = random() * 0.5
+                    sphere_mat = Metal(color, fuzz)
+                    world.append(Sphere(center, 0.2, sphere_mat))
+                else:
+                    sphere_mat = Dialectric(1.5)
+                    world.append(Sphere(center, 0.2, sphere_mat))
+    mat1 = Dialectric(1.5)
+    world.append(Sphere(Point3(0, 1, 0), 1.0, mat1))
+    mat2 = Lambertian(Color(0.4, 0.2, 0.1))
+    world.append(Sphere(Point3(-4, 1, 0), 1.0, mat2))
+    mat3 = Metal(Color(0.7, 0.6, 0.5), 0.0)
+    world.append(Sphere(Point3(4, 1, 0), 1.0, mat3))
+    return world
+
+
 def makeImage():
+    world = make_world()
 
-    material_ground = Lambertian(Color(0.8, 0.8, 0.0))
-    material_center = Lambertian(Color(0.7, 0.3, 0.3))
-    material_left = Metal(Color(0.8, 0.8, 0.8), 0.3)
-    material_right = Metal(Color(0.8, 0.6, 0.2), 1.0)
-    material_left_dia = Dialectric(1.5)
-    material_center_dia = Dialectric(1.5)
-
-    world = [
-        Sphere(Point3(0, -100.5, -1), 100, material_ground),
-        Sphere(Point3(0, 0, -1.0), 0.5, material_center),
-        Sphere(Point3(-1.0, 0, -1.0), 0.5, material_left_dia),
-        Sphere(Point3(1.0, 0, -1.0), 0.5, material_right),
-    ]
-
-    lookfrom = Point3(3, 3, 2)
-    lookat = Point3(0, 0, -1)
+    lookfrom = Point3(13, 2, 3)
+    lookat = Point3(0, 0, 0)
     vup = Vec3(0, 1, 0)
-    dist_to_focus = SubtractVectors(lookfrom, lookat).length()
-    aperture = 2.0
+    dist_to_focus = 10.0
+    aperture = 0.1
 
     cam = Camera(
         lookfrom,
