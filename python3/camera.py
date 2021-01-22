@@ -25,7 +25,7 @@ class Camera():
         self.VERTICAL = MultiplyVectorByConstant(
             MultiplyVectorByConstant(
                 self.V,
-                self.VIEWPORT_WIDTH),
+                self.VIEWPORT_HEIGHT),
             focus_dist
         )
         self.LOWER_LEFT_CORNER = SubtractVectors(
