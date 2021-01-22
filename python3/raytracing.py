@@ -9,8 +9,8 @@ from vec3_utils import DivideVectorByConstant, MultiplyVectorByConstant, AddVect
 from print_utils import PrintColor
 
 SAMPLES_PER_PIXEL = 2
-ASPECT_RATIO = 3.0 / 2.0
-IMG_WIDTH = 1200
+ASPECT_RATIO = 16.0 / 16.0
+IMG_WIDTH = 400
 IMG_HEIGHT = int(IMG_WIDTH / ASPECT_RATIO)
 
 def make_world():
